@@ -1,0 +1,40 @@
+version: '3.7'
+services:
+  
+  redis:
+    image: redis:7.2-alpine
+    restart: on-failure
+    ports:
+      - "${REDIS_LOCAL_PORT}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 15s
+      timeout: 30s
+      retries: 10
+
+  mysql:
+    image: mysql:8.0-oracle
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    restart: on-failure
+    ports:
+      - ${MYSQL_LOCAL_PORT:-3306}:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-notification}
+      - MYSQL_USER=${MYSQL_USER:-notification}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-notification}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 15s
+      timeout: 30s
+      retries: 10
+
+volumes:
+  redis-data:
+  mysql-data:
+
+

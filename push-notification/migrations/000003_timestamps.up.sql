@@ -1,0 +1,8 @@
+ALTER TABLE `providers` ALTER COLUMN `created_at` DROP DEFAULT;
+ALTER TABLE `providers` ALTER COLUMN `updated_at` DROP DEFAULT;
+
+ALTER TABLE `sms` ALTER COLUMN `created_at` DROP DEFAULT;
+ALTER TABLE `sms` ALTER COLUMN `updated_at` DROP DEFAULT;
+
+ALTER TABLE `templates` ALTER COLUMN `created_at` DROP DEFAULT;
+ALTER TABLE `templates` ALTER COLUMN `updated_at` DROP DEFAULT;

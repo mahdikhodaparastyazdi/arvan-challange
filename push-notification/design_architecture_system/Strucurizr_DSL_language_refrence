@@ -1,0 +1,120 @@
+workspace "Notification Push" {
+    model {
+        user = person "User"
+        
+        BusinessServices = softwareSystem "Business Services" {
+            OrderService = container "Order Service" {
+            }
+            PaymentService = container "Payment Service" {
+            }
+        }
+        
+        NotificationGateway = softwareSystem "Notification Gateway" {
+           OrderService -> this "single notification"
+           PaymentService -> this "notification in batch"
+        }
+           
+        NotificationDistribution = softwareSystem "Notification Distribution" {
+            NotificationGateway -> this 
+            
+            Validation = container "Validation" {
+            }
+            Scheduler = container "Scheduler" {
+            }
+            Prioriy = container "Prioriy" {
+            }
+            Template = container "Template" {
+            }
+        }
+        
+        NotificationRouter = softwareSystem "Notification Router(Queues)" {
+            NotificationDistribution -> this ""
+        }
+           
+        Channels = softwareSystem "Channels" {
+            NotificationRouter -> this 
+            
+            Email = container "Email" {
+            }
+            SMS = container "SMS" {
+            }
+            InAppDelivery = container "In-App Delivery" {
+            }
+            SocialMedia = container "Social Media" {
+            }
+        }
+        
+        NotificationTracingAnalyics = softwareSystem "Notification Tracing & Analyics" {
+            Channels -> this ""
+        }
+        
+    }
+    
+
+    views {
+    
+        systemLandscape {
+            include BusinessServices
+            include NotificationGateway
+            include NotificationDistribution
+            include NotificationRouter
+            include Channels
+            include NotificationTracingAnalyics
+            
+        }
+        // System Context views
+        systemContext BusinessServices {
+            include *
+            autolayout
+        }
+        
+        systemContext NotificationGateway {
+            include *
+            autolayout
+        }
+        
+        systemContext NotificationDistribution {
+            include *
+            autolayout
+        }
+        
+        systemContext NotificationRouter {
+            include *
+            autolayout
+        }
+        
+        systemContext Channels {
+            include *
+            autolayout
+        }
+
+        // Container views
+        container BusinessServices {
+            include *
+            autolayout
+        }
+        
+        container NotificationGateway {
+            include *
+            autolayout
+        }
+        
+        container NotificationDistribution {
+            include *
+            autolayout
+        }
+        
+        container NotificationRouter {
+            include *
+            autolayout
+        }
+        
+        container Channels {
+            include *
+            autolayout
+        }
+
+        theme default
+    }
+}
+
